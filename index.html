@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kushaq VCDS Guide – 2023 1.5 TSI DSG</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0f0e;
+    --bg2: #161917;
+    --bg3: #1e2120;
+    --border: #2a2e2b;
+    --border2: #3a3f3b;
+    --text: #e8ece9;
+    --text2: #8a9a8c;
+    --text3: #5a6b5c;
+    --green: #4ade80;
+    --green-dim: #1a3322;
+    --green-mid: #22c55e;
+    --amber: #fbbf24;
+    --amber-dim: #2a1f08;
+    --red: #f87171;
+    --red-dim: #2a0e0e;
+    --blue: #60a5fa;
+    --blue-dim: #0e1e35;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .header h1 { font-family: var(--mono); font-size: 18px; font-weight: 500; color: var(--green); letter-spacing: -0.02em; }
+  .header p { font-size: 12px; color: var(--text2); margin-top: 4px; }
+  .badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .badge { font-family: var(--mono); font-size: 10px; padding: 3px 10px; border-radius: 2px; font-weight: 500; }
+  .b-green { background: var(--green-dim); color: var(--green); border: 1px solid #1e4a30; }
+  .b-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid #3a2a0a; }
+  .b-red { background: var(--red-dim); color: var(--red); border: 1px solid #3a1a1a; }
+  .b-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid #0e2a45; }
+
+  /* ── Layout ── */
+  .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 100px); }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 100px;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+  .sidebar-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; color: var(--text3); padding: 0 20px 8px; text-transform: uppercase; }
+  .nav-item {
+    display: block;
+    padding: 7px 20px;
+    font-size: 12px;
+    color: var(--text2);
+    text-decoration: none;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .nav-item:hover { color: var(--text); background: var(--bg3); }
+  .nav-item.active { color: var(--green); border-left-color: var(--green); background: var(--green-dim); }
+  .nav-divider { height: 1px; background: var(--border); margin: 12px 20px; }
+
+  /* ── Content ── */
+  .content { padding: 32px 40px; max-width: 860px; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 48px; scroll-margin-top: 120px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 32px; height: 32px;
+    background: var(--green-dim);
+    border: 1px solid #1e4a30;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .section-title { font-family: var(--mono); font-size: 15px; font-weight: 500; color: var(--text); }
+  .section-count { font-family: var(--mono); font-size: 11px; color: var(--text3); margin-left: auto; }
+
+  /* ── Tweak card ── */
+  .tweak {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .tweak-header {
+    padding: 14px 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+  }
+  .tweak-header:hover { background: var(--bg3); }
+  .tweak-name { font-size: 13px; font-weight: 500; color: var(--text); flex: 1; }
+  .tweak-module { font-family: var(--mono); font-size: 10px; color: var(--text3); background: var(--bg3); padding: 2px 8px; border-radius: 2px; flex-shrink: 0; }
+  .tweak-chevron { color: var(--text3); font-size: 10px; transition: transform 0.2s; flex-shrink: 0; }
+  .tweak.open .tweak-chevron { transform: rotate(180deg); }
+
+  .tweak-body { display: none; border-top: 1px solid var(--border); padding: 18px; }
+  .tweak.open .tweak-body { display: block; }
+
+  /* Steps */
+  .steps { margin-bottom: 14px; }
+  .step {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+  }
+  .step-n {
+    width: 20px; height: 20px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--green);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-text { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .step-text code {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--bg3);
+    color: var(--green);
+    padding: 1px 6px;
+    border-radius: 2px;
+    border: 1px solid var(--border2);
+  }
+
+  /* Notices */
+  .notice {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  .notice-icon { flex-shrink: 0; font-size: 13px; margin-top: 0px; }
+  .n-warn { background: var(--amber-dim); color: var(--amber); border: 1px solid #3a2a0a; }
+  .n-tip { background: var(--green-dim); color: #86efac; border: 1px solid #1e4a30; }
+  .n-info { background: var(--blue-dim); color: #93c5fd; border: 1px solid #0e2a45; }
+  .n-danger { background: var(--red-dim); color: #fca5a5; border: 1px solid #3a1a1a; }
+
+  /* Tags on tweak header */
+  .tag { font-size: 9px; padding: 2px 6px; border-radius: 2px; font-family: var(--mono); font-weight: 500; flex-shrink: 0; }
+  .tag-pop { background: var(--green-dim); color: var(--green-mid); border: 1px solid #1e4a30; }
+  .tag-dsg { background: var(--blue-dim); color: var(--blue); border: 1px solid #0e2a45; }
+  .tag-hw  { background: var(--amber-dim); color: var(--amber); border: 1px solid #3a2a0a; }
+  .tag-sfd { background: var(--red-dim); color: var(--red); border: 1px solid #3a1a1a; }
+
+  /* Intro box */
+  .intro-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.7;
+  }
+  .intro-box strong { color: var(--text); }
+
+  /* Legend */
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px; }
+  .leg { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text2); }
+
+  @media (max-width: 700px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .content { padding: 20px; }
+    .header { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>// VCDS GUIDE — SKODA KUSHAQ</h1>
+      <p>2023 · 1.5 TSI DSG · MQB A0 IN · Pre-April 2024 build · Step-by-step for every tweak</p>
+    </div>
+  </div>
+  <div class="badges">
+    <span class="badge b-green">✓ pre-SFD2 — full access</span>
+    <span class="badge b-blue">DQ381 wet-clutch DSG</span>
+    <span class="badge b-amber">ACT cylinder deactivation</span>
+    <span class="badge b-red">⚠ always save original values first</span>
+  </div>
+</div>
+
+<div class="layout">
+
+  <nav class="sidebar">
+    <div class="sidebar-label">Categories</div>
+    <a class="nav-item" onclick="scrollTo('start-stop')">⏸ Start/Stop disable</a>
+    <a class="nav-item" onclick="scrollTo('cluster')">📊 Instrument cluster</a>
+    <a class="nav-item" onclick="scrollTo('climate')">❄ Climate / AC</a>
+    <a class="nav-item" onclick="scrollTo('locking')">🔐 Locking & remote</a>
+    <a class="nav-item" onclick="scrollTo('lighting')">💡 Lighting</a>
+    <a class="nav-item" onclick="scrollTo('indicators')">🔄 Indicators</a>
+    <a class="nav-item" onclick="scrollTo('infotainment')">📺 Infotainment</a>
+    <a class="nav-item" onclick="scrollTo('dynamics')">🏎 Driving dynamics</a>
+    <a class="nav-item" onclick="scrollTo('dsg')">⚙ DSG gearbox</a>
+  </nav>
+
+  <main class="content">
+
+    <div class="intro-box">
+      <strong>Before you start:</strong> Run an Auto-Scan first and save the report. Before changing any coding or adaptation, write down the <strong>original value</strong> in a text file. Every change here is reversible — just put the original value back. Ignition ON, engine OFF for most operations. Keep battery charged (or use a charger) during long sessions.
+    </div>
+
+    <div class="legend">
+      <div class="leg"><span class="tag tag-pop">popular</span> Commonly done on Kushaq</div>
+      <div class="leg"><span class="tag tag-dsg">DSG only</span> 1.5 DSG exclusive</div>
+      <div class="leg"><span class="tag tag-hw">hardware</span> Needs physical part</div>
+      <div class="leg"><span class="tag tag-sfd">SFD token</span> BCM needs offline token</div>
+    </div>
+
+    <!-- ══════════════ START/STOP ══════════════ -->
+    <div class="section" id="start-stop">
+      <div class="section-header">
+        <div class="section-icon">⏸</div>
+        <span class="section-title">Start/Stop — permanent disable</span>
+        <span class="section-count">2 methods</span>
+      </div>
+
+      <div class="tweak open">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Method 1 — Default off via Central Electronics</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Connect VCDS, ignition ON, engine OFF</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Select Control Module → <code>09 – Central Electronics</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Click <code>Security Access</code> → enter code <code>20113</code> → click Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Click <code>Adaptation</code> → in the channel box type <code>34</code> → click Read</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Note the current value shown (e.g. <code>9</code>)</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-text">To <strong>disable Start/Stop permanently</strong>: subtract 4 from the value → enter new value → click Do It!</div></div>
+            <div class="step"><div class="step-n">7</div><div class="step-text">To make it <strong>remember last state</strong> instead: add 32 to original value — better option if you sometimes want it on</div></div>
+            <div class="step"><div class="step-n">8</div><div class="step-text">Test: start car — Start/Stop button should now show OFF by default</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> "Remember last state" (add 32) is arguably better — it stays off if you turned it off, on if you left it on. One-time setup, no button press needed.</div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> If Channel 34 method doesn't work on your exact build, try Method 2 below via the gateway voltage trick.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Method 2 — Voltage threshold trick via Gateway</span>
+          <span class="tweak-module">Module 19</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select Control Module → <code>19 – Gateway</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Click <code>Adaptation</code> → search for <code>start-stop start voltage limit</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Current value will be around <code>7.8V</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Change to <code>12.1V</code> → click Do It!</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Start/Stop now thinks battery is always too low to activate and stays off permanently</div></div>
+          </div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> This is a workaround, not a direct disable. Fully reversible — just set voltage back to 7.8 to restore. Works on builds where Channel 34 has no effect.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ CLUSTER ══════════════ -->
+    <div class="section" id="cluster">
+      <div class="section-header">
+        <div class="section-icon">📊</div>
+        <span class="section-title">Instrument cluster</span>
+        <span class="section-count">4 tweaks</span>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Remove 80 & 120 km/h speed alert beeps</span>
+          <span class="tweak-module">Module 17</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select Control Module → <code>17 – Instruments</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Click <code>Adaptation</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Search for <code>speed warning</code> or <code>Geschwindigkeitswarnung</code> in the channel list</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">You'll see two channels — one for first threshold (80 km/h), one for second (120 km/h)</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Set both values to <code>0</code> (or max speed, e.g. 250) → click Do It! for each</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-text">Test by driving past 80 km/h — no beep should occur</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Most commonly done first on Indian Kushaq/Taigun — confirmed working by many owners.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Seatbelt warning chime adjustment</span>
+          <span class="tweak-module">Module 17</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select Control Module → <code>17 – Instruments</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>seatbelt</code> or <code>belt warning</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Options typically include: chime volume, speed threshold at which warning activates, or completely disable</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Note original value, adjust as desired → Do It!</div></div>
+          </div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> Disabling seatbelt warning is not recommended for safety. Consider just lowering the chime volume or raising the speed threshold instead.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Battery voltage display in cluster</span>
+          <span class="tweak-module">Module 17</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>17 – Instruments</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>battery</code> or <code>voltage display</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Enable the channel → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Battery voltage now appears in the MFD trip computer cycle</div></div>
+          </div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> Useful for monitoring battery health, especially relevant for the DSG's 12V system.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Oil temperature display</span>
+          <span class="tweak-module">Module 17</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>17 – Instruments</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>oil temperature</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Set to active/enabled → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Cycle through MFD to find oil temp display</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Great for knowing when your engine is truly warm before pushing hard, especially relevant for the 1.5 TSI on cold Bengaluru winter mornings.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ CLIMATE ══════════════ -->
+    <div class="section" id="climate">
+      <div class="section-header">
+        <div class="section-icon">❄</div>
+        <span class="section-title">Climate / AC</span>
+        <span class="section-count">3 tweaks</span>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Improve AC cooling performance</span>
+          <span class="tweak-module">Module 08</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select Control Module → <code>08 – Auto HVAC</code> (or "Climatronic")</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Click <code>Adaptation</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Search for <code>evaporator</code> or <code>target temperature</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Note current value (typically around 5–6°C from factory)</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Set to <code>2.5°C</code> or <code>3°C</code> → click Do It!</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-text">Test: run AC on full auto — vent temperature should drop noticeably faster</div></div>
+          </div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> Don't go below 2°C — risk of evaporator freeze and ice forming, which can block airflow. 2.5–3°C is the sweet spot confirmed by Slavia/Kushaq owners.</div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> This is the single biggest real-world improvement you can make. AC cooling time drops dramatically, especially important in Bengaluru summer.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Display blower speed in AC Auto mode</span>
+          <span class="tweak-module">Module 08</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>08 – Auto HVAC</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>blower</code> or <code>fan speed display</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Enable → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">In Auto mode, the fan speed LEDs on the AC panel now show current fan level instead of being blank</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Disable Start/Stop via AC (alternative method)</span>
+          <span class="tweak-module">Module 08</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>08 – Auto HVAC</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>start stop</code> or <code>A/C comfort param for start/stop</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Current value is typically <code>5</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Set to <code>0</code> → Do It! — Start/Stop will not activate when AC is running (which is almost always)</div></div>
+          </div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> A third method for Start/Stop disable. Works by telling the AC module never to give Start/Stop permission when the compressor is demanded. Since AC runs most of the time in India, effectively disables it.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ LOCKING ══════════════ -->
+    <div class="section" id="locking">
+      <div class="section-header">
+        <div class="section-icon">🔐</div>
+        <span class="section-title">Locking & remote</span>
+        <span class="section-count">7 tweaks</span>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Acoustic beep on lock/unlock</span>
+          <span class="tweak-module">Module 46</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>46 – Central Convenience / Comfort System</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Click <code>Adaptation</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Search for <code>horn</code> or <code>acoustic</code> or <code>beep</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Find channels for "unlock horn sounds" and "lock horn sounds"</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Set both to enabled/active → Do It! for each</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-text">Test: lock the car — you should hear one beep for unlock, two for lock</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Alternatively: Long Coding Helper → Byte 01 → Bit 2 (lock beep) and Bit 3 (unlock beep) if using older VCDS label files.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Auto-lock above 10 km/h</span>
+          <span class="tweak-module">Module 46</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>46 – Central Convenience</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>auto lock</code> or channel <code>03</code> (auto lock when moving)</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Enable → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">All doors lock automatically once you exceed 10 km/h</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Auto-unlock on ignition off</span>
+          <span class="tweak-module">Module 46</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>46 – Central Convenience</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>auto unlock</code> or channel <code>04</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Enable → Do It!</div></div>
+          </div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> Pairs well with auto-lock above — car locks when driving, unlocks when you turn off. Good combo for daily use.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Control driver window via remote key</span>
+          <span class="tweak-module">Module 46</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>46 – Central Convenience</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>window</code> or <code>remote window</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Enable "window roll down via remote" channel → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Test: hold the unlock button on keyfob — driver window should roll down</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Incredibly useful in summer — vent the hot cabin before getting in. Hold lock to roll up, hold unlock to roll down.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">ORVM auto-fold on long press of lock only</span>
+          <span class="tweak-module">Module 46</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>46 – Central Convenience</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>mirror fold</code> or <code>ORVM</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Change from "fold on every lock" to "fold on long press only" → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Now mirrors only fold when you long-press the lock button, not every single time you lock</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Saves mirror motor cycles. Use long press only when parking in tight spots.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Single door unlock (first press = driver only)</span>
+          <span class="tweak-module">Module 46</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>46 – Central Convenience</code> → Recode (07)</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Click <code>Long Coding Helper</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Look for "single door unlock" bit — enable it</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">First press of unlock = driver door only. Second press = all doors</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Passenger mirror dip on reverse</span>
+          <span class="tweak-module">Module 46 / BCM</span>
+          <span class="tag tag-sfd">SFD token</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">In VCDS: go to <code>46</code> or the BCM module → Adaptation → find <code>mirror dip on reverse</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">When you try to write the value, VCDS will prompt for an SFD unlock</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">In VCDS: go to <code>Extras → SFD → Request Token</code> → save the request file</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Submit the file to VAG's SFD server (free — Ross-Tech wiki has the URL)</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Receive token file → load into VCDS → now write the adaptation</div></div>
+          </div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> The SFD token is a one-time unlock per VIN. Once done, that module is unlocked for future coding too. Takes about 10–15 minutes total.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ LIGHTING ══════════════ -->
+    <div class="section" id="lighting">
+      <div class="section-header">
+        <div class="section-icon">💡</div>
+        <span class="section-title">Lighting</span>
+        <span class="section-count">11 tweaks</span>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Enable rear lights as DRL</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>Leuchte</code> channels — these control individual light functions</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Find the rear light segment channel (Leuchte 18/19/20 — varies by build)</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Change the function assignment from "off in DRL mode" to "on in DRL mode"</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Screenshot all Leuchte channels before touching — easy to get confused</div></div>
+          </div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> Leuchte channels are complex — there are dozens of them and they look similar. Take a full screenshot before any change. Don't guess which segment is which — test with lights on before saving.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">DRL blink with indicator (dim on indicator side)</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>DRL</code> and <code>indicator</code> or <code>turn signal</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Look for "DRL dimming when indicator active" channel</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Enable → Do It!</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Test: turn on indicator — DRL on that side should dim or switch off</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Makes indicators much more visible in bright daylight. Standard on European spec cars.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Fog lights as static cornering lights</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Security Access → code <code>31347</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Click <code>Coding</code> → <code>Long Coding Helper</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Go to <code>Byte 14</code> → <code>Bit 7</code> — enable "cornering fog lights"</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Click Do It! to save coding</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Test: at low speed, turn the steering wheel — fog on that side should activate</div></div>
+          </div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> Works best at low speeds (&lt;40 km/h). Fog lights must be switched on for this to activate.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Fog lights flash with high beam flasher</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Security Access → <code>31347</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Long Coding Helper → <code>Byte 14</code> → <code>Bit 3</code> — enable</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Do It! to save</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Test: pull high beam stalk to flash — fogs should flash simultaneously</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Theater dimming for interior cabin lights</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>interior light</code> or <code>fade</code> or <code>dimming</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Find "interior light fade on ignition on" — enable → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Test: start car — interior lights should slowly fade out instead of cutting off abruptly</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Subtle but very premium-feeling. One of those things you notice every single time you start the car.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Brake lights on when boot lid is open</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>boot</code> or <code>tailgate</code> or <code>trunk open</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Find "brake light when boot open" channel → enable → Do It!</div></div>
+          </div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> Safety feature — warns approaching traffic when you're loading at the roadside.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Tail light segment blink with indicator</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Adaptation → Leuchte channels</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Identify the specific rear light segment Leuchte channel (take screenshots first)</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Change its function assignment to include "indicator blink" behaviour</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Test both sides before saving — confirm correct segment is blinking</div></div>
+          </div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> This is in the Leuchte programming area — most complex type of lighting change. Do not attempt until you're comfortable with how Leuchte channels work. Watch a YouTube video of Leuchte programming first.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">DRL only in Auto mode (not always-on)</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>DRL mode</code> or <code>daytime running light activation</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Change from "always active" to "active only in Auto mode" → Do It!</div></div>
+          </div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> If switch is at 0 (off), DRLs turn off completely with this setting. Use only if you have a specific reason — DRLs on always is safer.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Footwell light activation</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tag tag-hw">hardware</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">First physically install footwell LED lights (wiring is already present in the car)</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Select <code>09 – Central Electronics</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Search for <code>footwell</code> or <code>ambient</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Enable footwell lighting → Do It!</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">ORVM indicator out of phase with main indicator</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Coding → Long Coding Helper</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for "mirror indicator sync" or similar</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Disable synchronisation → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Mirror LED now blinks alternately (out of phase) with main indicator — ping-pong effect</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Fog lights in coming/leaving home sequence</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>coming home</code> or <code>leaving home</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Find the fog light participation channel → enable → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Also adjust duration if desired (how long lights stay on after locking)</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ INDICATORS ══════════════ -->
+    <div class="section" id="indicators">
+      <div class="section-header">
+        <div class="section-icon">🔄</div>
+        <span class="section-title">Indicators</span>
+        <span class="section-count">1 tweak</span>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Lane change indicator — 5 blinks instead of 3</span>
+          <span class="tweak-module">Module 09 / 46</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Adaptation (try here first)</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>convenience turn signal</code> or <code>lane change</code> or <code>blink count</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Change value from <code>3</code> to <code>5</code> → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">If not found in 09, try same search in <code>46 – Central Convenience</code></div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Test: tap indicator stalk lightly (convenience tap) — should now blink 5 times</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> 5 blinks gives following traffic more time to see your lane change. Small safety improvement, very commonly done.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ INFOTAINMENT ══════════════ -->
+    <div class="section" id="infotainment">
+      <div class="section-header">
+        <div class="section-icon">📺</div>
+        <span class="section-title">Infotainment (MIB2)</span>
+        <span class="section-count">4 tweaks</span>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Enable Sport / Offroad menu on infotainment</span>
+          <span class="tweak-module">Module 5F</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>5F – Information Electronics</code> (MIB head unit)</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Click <code>Adaptation</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Search for <code>sport</code> — find "Sport menu" or "driving mode display"</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Enable → Do It!</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Repeat for Offroad menu if desired</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-text">Restart infotainment (hold power button or cycle ignition) → new menu appears</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Display idle stop reason (why Start/Stop unavailable)</span>
+          <span class="tweak-module">Module 5F</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>5F – Information Electronics</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>idle stop</code> or <code>start stop reason</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Enable → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">The infotainment now shows text like "Battery not charged" or "Engine too cold" when Start/Stop stays off</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Dynaudio / Beats sound signature for amplifier</span>
+          <span class="tweak-module">Module 47</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>47 – Sound System</code> (or Amplifier module)</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Click <code>Adaptation</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Search for <code>amplifier config</code> or <code>sound signature</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Current value will be something like "Standard" or a numeric code</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Note original → change to Dynaudio profile → Do It!</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-text">Play music and listen — better bass separation and clarity reported by many owners</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Confirmed audible difference on the Kushaq/Slavia — better at complex music with multiple instruments. Easy to revert if you don't notice a difference.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">DRL control exposed in car settings menu</span>
+          <span class="tweak-module">Module 5F</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>5F – Information Electronics</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>DRL</code> or <code>daytime running</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Enable "DRL settings in car menu" → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Now you can adjust DRL behaviour from the infotainment settings without VCDS</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ DYNAMICS ══════════════ -->
+    <div class="section" id="dynamics">
+      <div class="section-header">
+        <div class="section-icon">🏎</div>
+        <span class="section-title">Driving dynamics</span>
+        <span class="section-count">3 tweaks</span>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">XDS+ torque vectoring improvement</span>
+          <span class="tweak-module">Module 03</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>03 – ABS Brakes</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>XDS</code> or <code>torque vectoring</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Find XDS intervention threshold — note original value</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Reduce threshold slightly (lower value = earlier intervention) → Do It!</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Test in a safe open area — car should feel sharper and more neutral in corners</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Very effective on the 1.5 TSI which has enough torque to actually benefit. Makes the car feel genuinely more agile on B-roads. Safe — XDS works purely via braking, no drivetrain change.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Dynamic steering weight adjustment</span>
+          <span class="tweak-module">Module 44 / 18</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>44 – Steering Assist</code> or <code>18 – Steering Column Electronics</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Security Access → try code <code>19249</code> or <code>20103</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Adaptation → search for <code>steering characteristic</code> or <code>assist curve</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Adjust steering weight profile → Do It!</div></div>
+          </div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> Steering changes feel different immediately. Test at low speed in a car park first. If steering feels wrong, revert immediately.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Enhanced throttle response</span>
+          <span class="tweak-module">Module 01</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>01 – Engine</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>throttle</code> or <code>accelerator pedal</code> or <code>pedal map</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Note original value — adjust pedal response curve → Do It!</div></div>
+          </div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> The 1.5 DSG has a deliberately softened throttle from factory to protect the DSG clutch from aggressive launches. Don't go too sharp — very aggressive maps can accelerate clutch wear on the DQ381 over time. A mild sharpening is fine.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ DSG ══════════════ -->
+    <div class="section" id="dsg">
+      <div class="section-header">
+        <div class="section-icon">⚙</div>
+        <span class="section-title">DSG gearbox (DQ381) — 1.5 DSG exclusive</span>
+        <span class="section-count">2 procedures</span>
+      </div>
+
+      <div class="tweak open">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">DSG clutch adaptation reset</span>
+          <span class="tweak-module">Module 02</span>
+          <span class="tag tag-dsg">DSG only</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Gear in <code>P</code>, engine OFF, ignition ON, handbrake ON, foot brake pressed throughout</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Check gearbox temperature in Measuring Values — must be above <code>15°C</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Check for fault codes in Module 02 — clear any present before proceeding</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Click <code>Basic Settings – 04</code> → enter group <code>060</code> → click Go</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Keep brake pressed — you'll hear clicking noises from the gearbox. This is normal.</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-text">Wait for status to show <code>Finished correctly</code> (about 60–90 seconds)</div></div>
+            <div class="step"><div class="step-n">7</div><div class="step-text">Start engine → cycle to D → drive gently for 15 minutes — no kickdown, no aggressive acceleration</div></div>
+            <div class="step"><div class="step-n">8</div><div class="step-text">Gearbox now relearns clutch pressure and bite points dynamically during this drive</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Do this whenever you notice DSG jerkiness in city traffic (common complaint). Takes 20 minutes total and often resolves the jerk completely. Safe to do every 20,000 km preventively.</div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> Do NOT touch throttle or gear selector during the static phase (step 4–6). Abort = start over.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">DSG live data — health monitoring</span>
+          <span class="tweak-module">Module 02</span>
+          <span class="tag tag-dsg">DSG only</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>02 – Auto Transmission</code> → Advanced Measuring Values</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search and add these channels: <code>clutch temperature 1</code>, <code>clutch temperature 2</code>, <code>TCU oil temp</code>, <code>clutch slip</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Click <code>Go</code> and take the car for a drive — watch values live</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Healthy: oil temp below 100°C normal driving, below 120°C spirited driving. Above 120°C = gearbox goes into safe mode</div></div>
+          </div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> Pure monitoring — no changes made. Do this first before any DSG adaptation. Gives you baseline health data and confirms ACT / DSG behaviour on your specific car.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  function toggle(header) {
+    const tweak = header.parentElement;
+    tweak.classList.toggle('open');
+  }
+
+  function scrollTo(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  // Highlight active section on scroll
+  const sections = document.querySelectorAll('.section');
+  const navItems = document.querySelectorAll('.nav-item');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 140) current = s.id;
+    });
+    navItems.forEach(n => {
+      n.classList.toggle('active', n.getAttribute('onclick')?.includes(current));
+    });
+  });
+</script>
+
+</body>
+</html>
