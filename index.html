@@ -228,7 +228,7 @@
   </div>
   <div class="badges">
     <span class="badge b-green">✓ pre-SFD2 — full access</span>
-    <span class="badge b-blue">DQ381 wet-clutch DSG</span>
+    <span class="badge b-blue">DQ200 dry-clutch DSG</span>
     <span class="badge b-amber">ACT cylinder deactivation</span>
     <span class="badge b-red">⚠ always save original values first</span>
   </div>
@@ -238,15 +238,17 @@
 
   <nav class="sidebar">
     <div class="sidebar-label">Categories</div>
-    <a class="nav-item" onclick="scrollTo('start-stop')">⏸ Start/Stop disable</a>
-    <a class="nav-item" onclick="scrollTo('cluster')">📊 Instrument cluster</a>
-    <a class="nav-item" onclick="scrollTo('climate')">❄ Climate / AC</a>
-    <a class="nav-item" onclick="scrollTo('locking')">🔐 Locking & remote</a>
-    <a class="nav-item" onclick="scrollTo('lighting')">💡 Lighting</a>
-    <a class="nav-item" onclick="scrollTo('indicators')">🔄 Indicators</a>
-    <a class="nav-item" onclick="scrollTo('infotainment')">📺 Infotainment</a>
-    <a class="nav-item" onclick="scrollTo('dynamics')">🏎 Driving dynamics</a>
-    <a class="nav-item" onclick="scrollTo('dsg')">⚙ DSG gearbox</a>
+    <a class="nav-item" onclick="navScrollTo('backup', this)">💾 Backup & restore</a>
+    <a class="nav-item" onclick="navScrollTo('start-stop', this)">⏸ Start/Stop disable</a>
+    <a class="nav-item" onclick="navScrollTo('cluster', this)">📊 Instrument cluster</a>
+    <a class="nav-item" onclick="navScrollTo('climate', this)">❄ Climate / AC</a>
+    <a class="nav-item" onclick="navScrollTo('locking', this)">🔐 Locking & remote</a>
+    <a class="nav-item" onclick="navScrollTo('lighting', this)">💡 Lighting</a>
+    <a class="nav-item" onclick="navScrollTo('indicators', this)">🔄 Indicators</a>
+    <a class="nav-item" onclick="navScrollTo('wipers', this)">🧹 Wipers & convenience</a>
+    <a class="nav-item" onclick="navScrollTo('infotainment', this)">📺 Infotainment</a>
+    <a class="nav-item" onclick="navScrollTo('dynamics', this)">🏎 Driving dynamics</a>
+    <a class="nav-item" onclick="navScrollTo('dsg', this)">⚙ DSG gearbox</a>
   </nav>
 
   <main class="content">
@@ -260,6 +262,148 @@
       <div class="leg"><span class="tag tag-dsg">DSG only</span> 1.5 DSG exclusive</div>
       <div class="leg"><span class="tag tag-hw">hardware</span> Needs physical part</div>
       <div class="leg"><span class="tag tag-sfd">SFD token</span> BCM needs offline token</div>
+    </div>
+
+    <!-- ══════════════ BACKUP & RESTORE ══════════════ -->
+    <div class="section" id="backup">
+      <div class="section-header">
+        <div class="section-icon">💾</div>
+        <span class="section-title">Backup & restore — do this first, every time</span>
+        <span class="section-count">7 items</span>
+      </div>
+
+      <div class="tweak open">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Method 1 — Auto-Scan backup (coding strings for all modules)</span>
+          <span class="tweak-module">Main Screen</span>
+          <span class="tag tag-pop">do this first</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Connect VCDS, ignition ON, all doors closed</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Main Screen → click <code>Auto-Scan</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Select your chassis / let VCDS auto-detect → click <code>Start</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Wait for full scan to complete (scans all modules, takes 3–5 minutes)</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Click <code>Save</code> — VCDS auto-names the file with your VIN and mileage</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-text">File saves to <code>C:\Ross-Tech\VCDS\Logs\</code> — copy this to a safe location (USB drive, cloud)</div></div>
+            <div class="step"><div class="step-n">7</div><div class="step-text">Open the saved .txt file — every module's <code>Coding:</code> line is your baseline backup</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> This captures all Long Coding strings for every module. It's a human-readable reference — if you ever need to restore a module's coding, open this file, find the module, copy the Coding value, and paste it back in VCDS.</div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> VCDS also automatically logs every change you make to <code>C:\Ross-Tech\VCDS\Debug\CodingLog.txt</code> — showing "recoded from X to Y" with timestamps. This is your automatic change history even if you forgot to note originals.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Method 2 — Adaptation channel map backup (per module CSV)</span>
+          <span class="tweak-module">Applications → Controller Channel Map</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">From Main Screen → click <code>Applications</code> → click <code>Controller Channel Map</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">In the Maps box: set <code>Controller Address</code> = the module you want (e.g. <code>09</code> for Central Electronics)</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Set <code>Function</code> = <code>Adaptations</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Set <code>Output</code> = <code>CSV File</code></div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Click <code>Go</code> — VCDS reads every adaptation channel in that module and saves to CSV</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-text">Repeat for each module you plan to modify: <code>08</code>, <code>09</code>, <code>17</code>, <code>46</code>, <code>5F</code>, <code>02</code>, <code>03</code></div></div>
+            <div class="step"><div class="step-n">7</div><div class="step-text">Store all CSV files in a dated folder: e.g. <code>Kushaq_backup_2024-01-15\</code></div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> This is the most thorough method — captures every adaptation value, not just coding strings. Especially important before touching Leuchte (lighting) channels in Module 09, where there are dozens of channels.</div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> VCDS cannot automatically restore from a CSV — it is a reference file only. To restore, you manually open the CSV, find the channel, and type the original value back into VCDS Adaptation. This is why noting values before changes is still essential.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Method 3 — Per-module coding screenshot (quick, before any single change)</span>
+          <span class="tweak-module">Any module → Coding / Adaptation</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Before touching any coding screen: screenshot the current Long Coding string shown in the Coding box</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Before touching any adaptation channel: note the value shown after clicking Read</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Save screenshot to phone or paste value into a text file named by module and date</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Only then make your change</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Fastest method for quick single changes. Combined with the CodingLog.txt auto-log, you'll always be able to get back to the original.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">How to restore — coding strings</span>
+          <span class="tweak-module">Any module → Coding</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Open your saved Auto-Scan .txt file (or CodingLog.txt from <code>C:\Ross-Tech\VCDS\Debug\</code>)</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Find the module address (e.g. <code>Address 09</code>) and copy the <code>Coding:</code> hex string shown there</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">In VCDS: Select Control Module → that module → click <code>Coding – 07</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Clear the coding box → paste the original hex string → click <code>Do It!</code></div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Module is now restored to its original coding</div></div>
+          </div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> CodingLog.txt shows every change as "recoded from [original] to [new]" — so even if you didn't save anything manually, you can find the original value there and paste it back.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">How to restore — adaptation values</span>
+          <span class="tweak-module">Any module → Adaptation</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Open your saved CSV file for that module (from Method 2), or your text/screenshot notes</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Find the channel name and its original value</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">In VCDS: Select module → Adaptation → find the same channel → click Read</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Replace current value with original → click <code>Do It!</code></div></div>
+          </div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> VCDS has no one-click "restore all" function — each channel must be restored individually. This is why doing full CSV backups before a session saves a lot of time if things go wrong.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Recommended backup folder structure</span>
+          <span class="tweak-module">Windows / PC</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Create a folder: <code>Kushaq_VCDS_Backups\</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Inside, create dated subfolders: <code>2024-01-15_before_AC_tweak\</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Save Auto-Scan .txt and any module CSV files into the dated folder before each session</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">After the session, also copy <code>CodingLog.txt</code> from <code>C:\Ross-Tech\VCDS\Debug\</code> into the same folder</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Back up the whole <code>Kushaq_VCDS_Backups\</code> folder to Google Drive or USB</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Takes 5 minutes before each session. Saves hours of pain if something goes unexpectedly wrong. Treat it like git commits — backup before every change.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Emergency fix — modules frozen / steering controls stopped working</span>
+          <span class="tweak-module">Hardware</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">If after a VCDS session something stops working (steering buttons, horn, MID modes) — do not panic</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">End the VCDS session cleanly if still connected → close VCDS → disconnect cable</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Turn ignition off → open bonnet → disconnect the <strong>negative terminal</strong> of the battery</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Wait <strong>10 full minutes</strong> to allow all residual current to drain from modules</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Reconnect negative terminal → start car → test the affected controls</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-text">Run Auto-Scan → clear any Bus communication or steering fault codes that appeared</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Confirmed fix by Team-BHP members — frozen modules are almost always caused by static discharge or a ground loop (laptop plugged into wall while VCDS connected). The battery reset clears the stuck session. Always use your laptop on battery power when doing VCDS coding, not plugged into mains.</div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> This only applies if nothing was written — if you made a coding change that caused the issue, restore the original value first using the backup before trying the battery reset.</div>
+        </div>
+      </div>
     </div>
 
     <!-- ══════════════ START/STOP ══════════════ -->
@@ -317,7 +461,7 @@
       <div class="section-header">
         <div class="section-icon">📊</div>
         <span class="section-title">Instrument cluster</span>
-        <span class="section-count">4 tweaks</span>
+        <span class="section-count">7 tweaks</span>
       </div>
 
       <div class="tweak">
@@ -390,6 +534,62 @@
           <div class="notice n-tip"><span class="notice-icon">💡</span> Great for knowing when your engine is truly warm before pushing hard, especially relevant for the 1.5 TSI on cold Bengaluru winter mornings.</div>
         </div>
       </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Steering angle display in cluster</span>
+          <span class="tweak-module">Module 17</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>17 – Instruments</code> → <code>Adaptation</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>OFFROAD</code> → find the <code>Display</code> channel under it</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Enable → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">After saving, use the steering wheel buttons to go into Instrument Cluster settings</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Select <code>Steering Angle</code> as the MFD display — the cluster now shows a live steering angle gauge</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Confirmed working on Taigun, Virtus, Kushaq, and Slavia — all share the same digital cluster platform. After enabling, the option appears in the cluster's MFD menu via the steering wheel scroll button. Very useful for off-road or tight parking manoeuvres.</div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> This is the OFFROAD adaptation channel in Module 17 — not related to a separate offroad mode. It unlocks the cluster's ability to render the steering angle graphic in the MFD display area.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Refuel quantity display in cluster</span>
+          <span class="tweak-module">Module 17</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>17 – Instruments</code> → <code>Coding – 07</code> → <code>Long Coding Helper</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Find the channel <code>Volume to be replenished</code> (or search for <code>refuel</code>)</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Set to <code>Yes</code> / enabled → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">After saving, use steering wheel buttons to go into cluster settings → select <code>Refuel Quantity</code> as MFD display</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Cluster now shows how many litres are needed to fill to the brim based on current fuel level</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Confirmed working on Taigun/Virtus/Kushaq/Slavia. This is a long coding change (not adaptation). Very handy at the petrol station — no more mental maths on how much to ask for.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Change digital cluster theme colour (RGB)</span>
+          <span class="tweak-module">Module 17</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>17 – Instruments</code> → <code>Adaptation</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>default_color</code> — you'll find three channels: Red, Green, Blue</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Enter 8-bit values (0–255) for each channel → Do It! for each</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Useful presets: <code>250, 0, 0</code> = GT Red · <code>0, 160, 255</code> = stock blue · <code>0, 143, 132</code> = aqua green · <code>128, 128, 128</code> = grey</div></div>
+          </div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> Confirmed on Taigun/Virtus/Kushaq/Slavia. The 1.5 GT variants ship with red as the factory colour. This lets you match any other variant's theme or set a fully custom colour.</div>
+        </div>
+      </div>
     </div>
 
     <!-- ══════════════ CLIMATE ══════════════ -->
@@ -397,7 +597,27 @@
       <div class="section-header">
         <div class="section-icon">❄</div>
         <span class="section-title">Climate / AC</span>
-        <span class="section-count">3 tweaks</span>
+        <span class="section-count">5 tweaks</span>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">AC long coding — Cold Tuning, More Air (strongest base improvement)</span>
+          <span class="tweak-module">Module 08</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>08 – Auto HVAC</code> → click <code>Coding – 07</code> (not Adaptation)</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Click <code>Long Coding Helper</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Find the channel called <code>Application Characteristics</code> — it will show a dropdown</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Note the current value (default is typically "Moderate: Normal air")</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Change to <code>Cold Tuning: More Air</code> → click Do It!</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Confirmed by audioholic on Team-BHP as the first thing everyone does. Changes the HVAC module's fundamental operating strategy — more aggressive fan ramp-up and colder target air before it reaches the cabin. Do this before touching evaporator temperature.</div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> This is a long coding change (not an adaptation) — it changes a bit/byte in the module's coding string, not a channel value. Always save the original hex string before changing.</div>
+        </div>
       </div>
 
       <div class="tweak">
@@ -416,8 +636,28 @@
             <div class="step"><div class="step-n">5</div><div class="step-text">Set to <code>2.5°C</code> or <code>3°C</code> → click Do It!</div></div>
             <div class="step"><div class="step-n">6</div><div class="step-text">Test: run AC on full auto — vent temperature should drop noticeably faster</div></div>
           </div>
-          <div class="notice n-warn"><span class="notice-icon">⚠</span> Don't go below 2°C — risk of evaporator freeze and ice forming, which can block airflow. 2.5–3°C is the sweet spot confirmed by Slavia/Kushaq owners.</div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> Don't go below 2°C — risk of evaporator freeze and ice forming, which can block airflow. 2.5–3°C is the sweet spot confirmed by Slavia/Kushaq owners. Every 0.5°C reduction costs roughly 1 km/l in city fuel efficiency.</div>
           <div class="notice n-tip"><span class="notice-icon">💡</span> This is the single biggest real-world improvement you can make. AC cooling time drops dramatically, especially important in Bengaluru summer.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Enable climate behaviour mode selector (Soft / Normal / Aggressive)</span>
+          <span class="tweak-module">Module 08</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>08 – Auto HVAC</code> → Coding → Long Coding Helper</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Find the channel: <code>Enable display and control via BAP</code> — enable it → Do It!</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">This enables both: the climate panel on the infotainment screen AND a new "Climate" entry under Vehicle Settings menu</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Inside that Vehicle Settings menu, you can now choose: <code>Soft</code>, <code>Normal</code>, or <code>Aggressive</code> cooling behaviour</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Restart infotainment to see the new menu</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Confirmed by audioholic: at Aggressive mode even 23°C set temperature gives chilly output. Use Soft/Normal when alone or in cooler months, switch to Aggressive when car is fully loaded or parked under the sun.</div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> This is the same step that enables the full climate panel on the infotainment touchscreen — it does both in one shot. No need to do the infotainment climate tweak separately.</div>
         </div>
       </div>
 
@@ -592,7 +832,7 @@
       <div class="section-header">
         <div class="section-icon">💡</div>
         <span class="section-title">Lighting</span>
-        <span class="section-count">11 tweaks</span>
+        <span class="section-count">13 tweaks</span>
       </div>
 
       <div class="tweak">
@@ -784,6 +1024,46 @@
           </div>
         </div>
       </div>
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Enable inner tail lamps as full brake lights</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Adaptation → Leuchte channels</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Find <code>Leuchte23SL HLC7</code> (rear left inner) and <code>Leuchte24SL HRA69</code> (rear right inner)</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">For each channel, set: <code>Light_Function_A</code> = Position lamps, <code>Light_Function_B</code> = Parklicht (left or right), <code>Dimming_AB</code> = 15, <code>Light_Control_HD_AB</code> = Always</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Then set: <code>Light_Function_C</code> = Brake lamp, <code>Light_Function_D</code> = not_activ, <code>Dimming_CD</code> = 126 (left) / 127 (right)</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Repeat for both left and right channels → Do It! for each</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-text">Test: press brake in daylight — entire tail lamp pair on each side should illuminate, not just the outer half</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Stock Kushaq/Slavia only uses outer tail lamp segments as brake lights — many people think your brake lights are faulty when they see only half lit. This fix makes the full tail lamp unit illuminate on braking, which looks correct and is more visible.</div>
+          <div class="notice n-danger"><span class="notice-icon">🔴</span> This is advanced Leuchte programming. Take a screenshot of ALL current values for both channels before making any changes. Incorrect Leuchte settings can cause lights to malfunction. Do NOT enable brake lights to flash like indicators — this is illegal and dangerous.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">LED load balancing — suppress OBD errors after LED upgrades</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">After installing aftermarket LED bulbs (reverse, indicators, fog lights), open VCDS and run Auto-Scan</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Note any fault codes like "open circuit" or "bulb out" for the affected lamp</div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Select <code>09 – Central Electronics</code> → Adaptation → search for <code>load balancing</code> or <code>lamp diagnostic</code></div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Find the specific Leuchte channel for the affected lamp → look for a load or wattage setting</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Adjust the expected wattage to match the actual LED wattage → Do It!</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-text">Clear fault codes → recheck — error should no longer return</div></div>
+          </div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> On MQB platform the lamp diagnostic is called "load balancing" — not "lamp check" as on older PQ cars. The error usually stays as an OBD fault only and doesn't appear on the instrument cluster, but it's clean to fix it properly.</div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> Only adjust the load value — do not change the light function assignments for this purpose. Wrong function assignments are harder to undo than load values.</div>
+        </div>
+      </div>
     </div>
 
     <!-- ══════════════ INDICATORS ══════════════ -->
@@ -814,12 +1094,57 @@
       </div>
     </div>
 
+    <!-- ══════════════ WIPERS & CONVENIENCE ══════════════ -->
+    <div class="section" id="wipers">
+      <div class="section-header">
+        <div class="section-icon">🧹</div>
+        <span class="section-title">Wipers & convenience</span>
+        <span class="section-count">2 tweaks</span>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Wiper tear-wipe after washer</span>
+          <span class="tweak-module">Module 09</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>wiper</code> or <code>tear wipe</code> or <code>nachWischen</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Find "tear wiping after washing" or similar channel → enable → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Test: pull the wiper washer stalk → after the initial wash, wipers should sweep 3 more times, then 2, then 1 to clear residual water</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> Confirmed working on Slavia/Kushaq by audioholic on Team-BHP. Eliminates the annoying smear left after using the washer — especially useful on dusty Bengaluru roads.</div>
+        </div>
+      </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Engine start button pulsation (breathing glow)</span>
+          <span class="tweak-module">Module 09 / 46</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>09 – Central Electronics</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>start button</code> or <code>push button</code> or <code>pulsation</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">If not found, try <code>46 – Central Convenience</code> → Adaptation with same search terms</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Enable pulsation → Do It!</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">The engine start/stop button LED now slowly pulses (breathes) when the car is parked — similar to a heartbeat glow</div></div>
+          </div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> Confirmed working without SFD token on 2023 Kushaq. Purely cosmetic — no functional effect. One of the few BCM-adjacent features still accessible on pre-2024 cars without an SFD token.</div>
+        </div>
+      </div>
+    </div>
+
     <!-- ══════════════ INFOTAINMENT ══════════════ -->
     <div class="section" id="infotainment">
       <div class="section-header">
         <div class="section-icon">📺</div>
         <span class="section-title">Infotainment (MIB2)</span>
-        <span class="section-count">4 tweaks</span>
+        <span class="section-count">5 tweaks</span>
       </div>
 
       <div class="tweak">
@@ -890,6 +1215,28 @@
           </div>
         </div>
       </div>
+
+      <div class="tweak">
+        <div class="tweak-header" onclick="toggle(this)">
+          <span class="tweak-name">Enable climate controls on infotainment screen</span>
+          <span class="tweak-module">Module 5F + 08</span>
+          <span class="tag tag-pop">popular</span>
+          <span class="tweak-chevron">▼</span>
+        </div>
+        <div class="tweak-body">
+          <div class="steps">
+            <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>5F – Information Electronics</code> → Adaptation</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>climate</code> or <code>air conditioning</code> or <code>AC display</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Find channel: <code>climate control menu activation</code> or <code>climatronic on MIB</code> — set to <code>active</code> → Do It!</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">If not found in 5F, go to <code>08 – Auto HVAC</code> → Adaptation → search <code>display</code> or <code>MIB</code></div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Enable the MIB display integration channel → Do It!</div></div>
+            <div class="step"><div class="step-n">6</div><div class="step-text">Restart infotainment (hold power, or cycle ignition off → on) — a climate widget should now appear on the home screen or in the car menu</div></div>
+            <div class="step"><div class="step-n">7</div><div class="step-text">You can now control fan speed, temperature, direction and seat heating (if fitted) directly from the touchscreen</div></div>
+          </div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> This is one of the most used infotainment tweaks on the Kushaq — the physical AC buttons remain fully functional, but you also get a full climate panel on screen with temperature, fan speed, and vent mode visualised.</div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> If the channel name doesn't match exactly, it may be labelled differently on your specific software version. Try searching: <code>Klimaanlage</code>, <code>Heizung</code>, <code>HVAC MIB</code>, or <code>comfort</code> in the Adaptation search box.</div>
+        </div>
+      </div>
     </div>
 
     <!-- ══════════════ DYNAMICS ══════════════ -->
@@ -948,7 +1295,7 @@
             <div class="step"><div class="step-n">2</div><div class="step-text">Search for <code>throttle</code> or <code>accelerator pedal</code> or <code>pedal map</code></div></div>
             <div class="step"><div class="step-n">3</div><div class="step-text">Note original value — adjust pedal response curve → Do It!</div></div>
           </div>
-          <div class="notice n-warn"><span class="notice-icon">⚠</span> The 1.5 DSG has a deliberately softened throttle from factory to protect the DSG clutch from aggressive launches. Don't go too sharp — very aggressive maps can accelerate clutch wear on the DQ381 over time. A mild sharpening is fine.</div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> The 1.5 DSG has a deliberately softened throttle from factory to protect the DSG clutch from aggressive launches. Don't go too sharp — very aggressive maps can accelerate clutch wear on the DQ200 over time. A mild sharpening is fine.</div>
         </div>
       </div>
     </div>
@@ -957,13 +1304,13 @@
     <div class="section" id="dsg">
       <div class="section-header">
         <div class="section-icon">⚙</div>
-        <span class="section-title">DSG gearbox (DQ381) — 1.5 DSG exclusive</span>
+        <span class="section-title">DSG gearbox (DQ200) — 1.5 DSG exclusive</span>
         <span class="section-count">2 procedures</span>
       </div>
 
       <div class="tweak open">
         <div class="tweak-header" onclick="toggle(this)">
-          <span class="tweak-name">DSG clutch adaptation reset</span>
+          <span class="tweak-name">DSG clutch adaptation reset (mechatronic calibration)</span>
           <span class="tweak-module">Module 02</span>
           <span class="tag tag-dsg">DSG only</span>
           <span class="tweak-chevron">▼</span>
@@ -971,22 +1318,23 @@
         <div class="tweak-body">
           <div class="steps">
             <div class="step"><div class="step-n">1</div><div class="step-text">Gear in <code>P</code>, engine OFF, ignition ON, handbrake ON, foot brake pressed throughout</div></div>
-            <div class="step"><div class="step-n">2</div><div class="step-text">Check gearbox temperature in Measuring Values — must be above <code>15°C</code></div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Check gearbox (mechatronic) temperature in Measuring Values — must be above <code>15°C</code> and below <code>45°C</code></div></div>
             <div class="step"><div class="step-n">3</div><div class="step-text">Check for fault codes in Module 02 — clear any present before proceeding</div></div>
             <div class="step"><div class="step-n">4</div><div class="step-text">Click <code>Basic Settings – 04</code> → enter group <code>060</code> → click Go</div></div>
-            <div class="step"><div class="step-n">5</div><div class="step-text">Keep brake pressed — you'll hear clicking noises from the gearbox. This is normal.</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">Keep brake pressed — you'll hear clicking noises from the gearbox. This is normal — the mechatronic is calibrating clutch bite points.</div></div>
             <div class="step"><div class="step-n">6</div><div class="step-text">Wait for status to show <code>Finished correctly</code> (about 60–90 seconds)</div></div>
-            <div class="step"><div class="step-n">7</div><div class="step-text">Start engine → cycle to D → drive gently for 15 minutes — no kickdown, no aggressive acceleration</div></div>
-            <div class="step"><div class="step-n">8</div><div class="step-text">Gearbox now relearns clutch pressure and bite points dynamically during this drive</div></div>
+            <div class="step"><div class="step-n">7</div><div class="step-text">Start engine → cycle to D → drive gently for 15 minutes — no kickdown, no aggressive acceleration, no full stops if possible</div></div>
+            <div class="step"><div class="step-n">8</div><div class="step-text">Gearbox now relearns dry clutch pressure and bite points dynamically during this drive</div></div>
           </div>
-          <div class="notice n-tip"><span class="notice-icon">💡</span> Do this whenever you notice DSG jerkiness in city traffic (common complaint). Takes 20 minutes total and often resolves the jerk completely. Safe to do every 20,000 km preventively.</div>
-          <div class="notice n-warn"><span class="notice-icon">⚠</span> Do NOT touch throttle or gear selector during the static phase (step 4–6). Abort = start over.</div>
+          <div class="notice n-tip"><span class="notice-icon">💡</span> The DQ200 is a dry-clutch gearbox — much more sensitive to clutch wear and calibration than dry-clutch DSGs. Jerky low-speed behaviour and hesitation in stop-go traffic is the DQ200's most common complaint, and this reset often completely resolves it. Do this every 15,000–20,000 km preventively.</div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> Do NOT touch throttle or gear selector during the static phase (steps 4–6). Temperature must be in range — too hot or cold and it won't complete correctly. Do not attempt right after a long drive.</div>
+          <div class="notice n-danger"><span class="notice-icon">🔴</span> DQ200-specific: if you ever notice shuddering when pulling away from rest (below 20 km/h), do this reset immediately. Prolonged shudder = early clutch wear signal. Do not ignore it.</div>
         </div>
       </div>
 
       <div class="tweak">
         <div class="tweak-header" onclick="toggle(this)">
-          <span class="tweak-name">DSG live data — health monitoring</span>
+          <span class="tweak-name">DSG live data — health monitoring (DQ200)</span>
           <span class="tweak-module">Module 02</span>
           <span class="tag tag-dsg">DSG only</span>
           <span class="tweak-chevron">▼</span>
@@ -994,11 +1342,13 @@
         <div class="tweak-body">
           <div class="steps">
             <div class="step"><div class="step-n">1</div><div class="step-text">Select <code>02 – Auto Transmission</code> → Advanced Measuring Values</div></div>
-            <div class="step"><div class="step-n">2</div><div class="step-text">Search and add these channels: <code>clutch temperature 1</code>, <code>clutch temperature 2</code>, <code>TCU oil temp</code>, <code>clutch slip</code></div></div>
-            <div class="step"><div class="step-n">3</div><div class="step-text">Click <code>Go</code> and take the car for a drive — watch values live</div></div>
-            <div class="step"><div class="step-n">4</div><div class="step-text">Healthy: oil temp below 100°C normal driving, below 120°C spirited driving. Above 120°C = gearbox goes into safe mode</div></div>
+            <div class="step"><div class="step-n">2</div><div class="step-text">Add these channels: <code>mechatronic temperature</code>, <code>clutch K1 temperature</code>, <code>clutch K2 temperature</code>, <code>clutch slip K1</code>, <code>clutch slip K2</code></div></div>
+            <div class="step"><div class="step-n">3</div><div class="step-text">Click <code>Go</code> and drive — watch values live on screen</div></div>
+            <div class="step"><div class="step-n">4</div><div class="step-text">Healthy ranges: mechatronic temp below <code>70°C</code> normal, below <code>85°C</code> spirited. Clutch slip near 0 RPM when not changing gear = healthy</div></div>
+            <div class="step"><div class="step-n">5</div><div class="step-text">If mechatronic exceeds ~90°C, DSG goes into protection mode — shifts become very slow and deliberate</div></div>
           </div>
-          <div class="notice n-info"><span class="notice-icon">ℹ</span> Pure monitoring — no changes made. Do this first before any DSG adaptation. Gives you baseline health data and confirms ACT / DSG behaviour on your specific car.</div>
+          <div class="notice n-warn"><span class="notice-icon">⚠</span> The DQ200 is a dry clutch — unlike the DQ381/DQ500, it has NO oil bath cooling for the clutch plates. Clutch heat builds quickly in heavy traffic, hill starts, or aggressive launches. Avoid excessive clutch slip situations (e.g. crawling uphill slowly for long periods).</div>
+          <div class="notice n-info"><span class="notice-icon">ℹ</span> Pure monitoring — no changes made. Do this first before any DSG adaptation. Also useful after the clutch adaptation reset — you can confirm the gearbox is behaving correctly during the relearn drive.</div>
         </div>
       </div>
     </div>
@@ -1012,25 +1362,27 @@
     tweak.classList.toggle('open');
   }
 
-  function scrollTo(id) {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function navScrollTo(id, el) {
+    const target = document.getElementById(id);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    event.target.classList.add('active');
+    (el || event.currentTarget).classList.add('active');
   }
 
-  // Highlight active section on scroll
-  const sections = document.querySelectorAll('.section');
-  const navItems = document.querySelectorAll('.nav-item');
+  // Highlight active section on window scroll
+  const _sections = document.querySelectorAll('.section');
+  const _navItems = document.querySelectorAll('.nav-item');
   window.addEventListener('scroll', () => {
     let current = '';
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 140) current = s.id;
+    _sections.forEach(s => {
+      if (window.scrollY + 160 >= s.offsetTop) current = s.id;
     });
-    navItems.forEach(n => {
-      n.classList.toggle('active', n.getAttribute('onclick')?.includes(current));
+    _navItems.forEach(n => {
+      const onclick = n.getAttribute('onclick') || '';
+      const match = onclick.match(/navScrollTo\('([^']+)'/);
+      n.classList.toggle('active', match ? match[1] === current : false);
     });
-  });
+  }, { passive: true });
 </script>
 
 </body>
